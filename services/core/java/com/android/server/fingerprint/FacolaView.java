@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.util.Slog;
 
 import android.view.WindowManager;
+import android.view.Display;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.os.Handler;
@@ -53,6 +54,7 @@ public class FacolaView extends ImageView implements OnTouchListener {
     private boolean visible = false;
 
     private final WindowManager mWM;
+    private final Display mDisplay;
     FacolaView(Context context) {
         super(context);
 
@@ -79,6 +81,7 @@ public class FacolaView extends ImageView implements OnTouchListener {
         mPaintShow.setColor(Color.argb(0x18, 0x00, 0xff, 0x00));
         setOnTouchListener(this);
         mWM = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        mDisplay = mWM.getDefaultDisplay();
         Slog.d("PHH-Enroll", "Created facola...");
         try {
             if(mW != -1)
@@ -95,7 +98,7 @@ public class FacolaView extends ImageView implements OnTouchListener {
         //TODO w!=h?
         if(mInsideCircle) {
             try {
-                int nitValue = 3;
+                int nitValue = mDisplay.getState() == Display.STATE_ON ? 3 : 1;
                 if(mXiaomiFingerprint != null) {
                     mMainHandler.postDelayed(() -> {
                         try {
